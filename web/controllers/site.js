@@ -1,12 +1,13 @@
 const Instrument = require('../models/instrument');
+const instruments = require('./instruments');
 
 class SiteControllers{
 
     getInstrument = (req, res, next) => {
-        Instrument.fetchAll()
-          .then(([rows, fieldData]) => {
+        Instrument.findAll()
+          .then(instruments => {
             res.render('site/home', {
-              ins: rows,
+              ins: instruments,
               pageTitle: 'All Instruments',
               path: '/'
             });

@@ -1,0 +1,17 @@
+<%- include('../includes/head.ejs') %>
+    <link rel = "stylesheet" href = "/css/auth.css">
+<div class="mt-4">
+    <h3>Login</h3>
+
+    <form class="login-form" action="/login" method="POST">
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" class="form-control" id="email" name = "email">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name = "password">
+            
+            <button type="submit" class="btn">Login</button>
+        </form>
+</div>
