@@ -9,8 +9,14 @@ const User = sequelize.define('user', {
     allowNull: false,
     primaryKey: true
   },
-  name: Sequelize.STRING,
-  email: Sequelize.STRING
+  email: Sequelize.STRING,
+  password: Sequelize.STRING,
+
+  role: {
+    type: Sequelize.ENUM('user', 'admin'),
+    defaultValue: 'user', // Mặc định là 'user' nếu không có giá trị được cung cấp
+    allowNull: true,
+  },
 });
 
 module.exports = User;

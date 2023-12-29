@@ -21,14 +21,18 @@
                     <li class="nav-item active">
                       <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
                     </li>
-                    
-                      <li class="main-header__item">
-                          <a class="nav-link" href="/admin/create">Add Product</a>
-                      </li>
-                      <li class="main-header__item">
-                          <a class="nav-link" href="/admin/instruments">Admin Products</a>
-                      </li>
-                      
+                    <% if (isAuthenticated) { %>
+
+  
+                            <li class="main-header__item">
+                              <a class="nav-link" href="/post">Add Product</a>
+                            </li>
+
+
+                        <li class="main-header__item">
+                            <a class="nav-link" href="/admin/instruments">Admin Products</a>
+                        </li>
+                      <% } %>
                   </ul>
 
                   <div class="dropdown">
@@ -36,8 +40,16 @@
                       Option
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                      <a class="dropdown-item" href="/login">Login</a>
-                      
+                      <% if (!isAuthenticated) { %>
+                          <a class="dropdown-item" href="/login">Login</a>
+                          <a class="dropdown-item" href="/signup">Sign Up</a>
+
+                      <% } else { %>
+                      <form action="/logout" method="post">
+                        <button type="submit">Logout</button>
+                        
+                    </form>
+                    <% } %>
                     </div>
                   </div>
 

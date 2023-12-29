@@ -1,0 +1,36 @@
+<!-- views/admin/pendingInstruments.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pending Instruments</title>
+    <!-- Đưa vào các file CSS cần thiết nếu có -->
+</head>
+<body>
+    <h1>Pending Instruments</h1>
+
+    <% if (pendingInstruments.length > 0) { %>
+        <ul>
+            <% pendingInstruments.forEach(instrument => { %>
+                <li>
+                    <strong>Title:</strong> <%= instrument.title %><br>
+                    <strong>Description:</strong> <%= instrument.description %><br>
+                    <!-- Thêm các thông tin khác bạn muốn hiển thị -->
+                    <form action="/admin/approve/<%= instrument.id %>" method="post">
+                        <button type="submit">Approve</button>
+                    </form>
+                    <form action="/admin/reject/<%= instrument.id %>" method="post">
+                        <button type="submit">Reject</button>
+                    </form>
+                </li>
+            <% }) %>
+        </ul>
+    <% } else { %>
+        <p>No pending instruments.</p>
+    <% } %>
+
+    <!-- Đưa vào các file script JS cần thiết nếu có -->
+</body>
+</html>

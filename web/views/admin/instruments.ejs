@@ -19,7 +19,7 @@
                                 <p class="card-text"><%= instrument.description %></p>
                                 <a href="/instrument/edit/<%= instrument.id %>?edit=true" class="btn btn-primary">Edit</a>
                                 <div class="card__actions">
-                                    <form action="/instrument/delete" method="POST">
+                                    <form action="/admin/delete" method="POST">
                                         <input type="hidden" value="<%= instrument.id %>" name="instrumentId">
                                         <button class="btn" type="submit">Delete</button>
                                     </form>

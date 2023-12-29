@@ -17,13 +17,16 @@
                                 </a>
                             
                                 <p class="card-text"><%= instrument.description %></p>
+                                <% if (isAuthenticated) { %>
                                 <a href="/admin/edit/<%= instrument.id %>?edit=true" class="btn btn-primary">Edit</a>
                                 <div class="card__actions">
                                     <form action="/admin/delete" method="POST">
                                         <input type="hidden" value="<%= instrument.id %>" name="instrumentId">
-                                        <button class="btn" type="submit">Delete</button>
+                                        <button class="btn"  type="submit">Delete</button>
                                     </form>
                                 </div>
+                                
+                                <% } %>
                                 
                             </div>
                         </div>

@@ -1,0 +1,27 @@
+<!-- create-performance.ejs -->
+
+<form action="/create-performance" method="post">
+    <label for="date">Date:</label>
+    <input type="date" id="date" name="date" required>
+  
+    <label for="location">Location:</label>
+    <input type="text" id="location" name="location" required>
+  
+    <label for="instrumentNames">Instruments:</label>
+    <select id="instrumentNames" name="instrumentNames" multiple required>
+      <!-- Assume instruments is an array of available instruments passed to the view -->
+      <% instruments.forEach(instrument => { %>
+        <option value="<%= instrument.title %>"><%= instrument.title %></option>
+      <% }); %>
+    </select>
+  
+    <!-- Đổi thành checkboxes để chọn nhiều nhạc cụ -->
+    <label>Choose Instruments:</label>
+    <% instruments.forEach(instrument => { %>
+      <input type="checkbox" name="instrumentNames" value="<%= instrument.title %>">
+      <%= instrument.title %><br>
+    <% }); %>
+  
+    <button type="submit">Create Performance</button>
+  </form>
+  
