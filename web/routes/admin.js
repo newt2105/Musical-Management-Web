@@ -9,7 +9,11 @@ router.get('/create', isAuth, adminController.getCreate);
 
 router.post('/create', adminController.postCreate);
 
-router.get('/instruments', adminController.getInstruments);
+router.get('/create-performance', adminController.getCreatePerformance);
+router.post('/create-performance', adminController.postCreatePerformance);
+
+// router.get('/:performance', adminController.getInstruments);
+router.get('/performance', adminController.getPerformances);
 
 router.get('/edit/:instrumentId', isAuth, adminController.getEdit);
 

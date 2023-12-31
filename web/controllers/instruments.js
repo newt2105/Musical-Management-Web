@@ -4,7 +4,7 @@ class InstrumentsControllers{
 
     show = (req, res, next) => {
         const insId = req.params.instrumentId
-        // console.log('params: ',req.params)
+        console.log('params: ',req.params)
         
         // console.log('id: ',req.params)
         Instrument.findAll({where: {id: insId}})

@@ -9,8 +9,12 @@ const Performance = sequelize.define('performance', {
     allowNull: false,
     primaryKey: true,
   },
+  title: Sequelize.STRING,
   date: Sequelize.DATE,
   location: Sequelize.STRING,
+  imageUrl: Sequelize.STRING,
+  videoId: Sequelize.STRING,
+
 });
 
 module.exports = Performance;

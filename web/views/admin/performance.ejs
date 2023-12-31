@@ -1,0 +1,30 @@
+<%- include('../includes/head.ejs') %>
+<head>
+    <body>
+        <div class="mt-4">
+            <div class="container">
+                    <div class="row">
+        
+                <% for (let performance of perf) { %>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card card-course-item ">
+                            <a href="/performance/<%= performance.id %>">
+                                <img class="card-img-top" src="<%= performance.imageUrl %>" alt="<%= performance.title %>">
+                            </a>
+                            <div class="card-body">
+                                <a href="/performance/<%= performance.id %>">
+                                    <h5 class="card-title"><%= performance.title %></h5>
+                                </a>
+                            
+                                <p class="card-text"><%= performance.description %></p>
+                            </div>
+                        </div>
+                    </div>
+                    <% } %>
+        
+        
+                </div>
+            </div>
+        </div>
+    </body>
+</head>

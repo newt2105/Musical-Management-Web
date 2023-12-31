@@ -1,5 +1,6 @@
 const Instrument = require('../models/instrument');
-
+const Performance = require('../models/performance');
+const User = require('../models/user');
 class AdminControllers{
 
     getCreate = (req, res, next) => {
@@ -132,20 +133,21 @@ class AdminControllers{
           .catch(err => console.log(err));
       }
 
-    getInstruments = (req, res, next) => {
-      Instrument.findAll()
-        .then(instruments => {
-          // console.log(instruments);
-          res.render('admin/instruments', {
-            ins: instruments,
-            pageTitle: 'Admin Intruments',
-            path: '/admin/instruments',
+    getPerformances = (req, res, next) => {
+      Performance.findAll()
+        .then(performances => {
+          console.log('nhac cu: ',performances);
+          res.render('admin/performance', {
+            perf: performances,
+            pageTitle: 'All performance',
+            path: '/admin/performance',
             isAuthenticated: req.isLoggedin,
             // role : req.session.user.role,
           });
         })
         .catch(err => console.log(err));
     };
+
 
     // postDelete = (req, res, next) => {
 
@@ -251,47 +253,112 @@ class AdminControllers{
               .catch(err => console.log(err));
           };
 
-          getCreatePerformance = (req, res, next) => {
-            if (req.session.isLoggedIn && req.session.user.role === 'admin') {
-              res.render('performances/create', {
-                pageTitle: 'Create a Performance',
-                isAuthenticated: req.session.isLoggedIn,
-              });
-            } else {
+          getCreatePerformance = async (req, res, next) => {
+            try {
+              if (req.session.isLoggedIn && req.session.user.role === 'admin') {
+                const instruments = await Instrument.findAll({
+                  where: { status: 'approved' }, // Lấy danh sách nhạc cụ đã được phê duyệt
+                });
+          
+                res.render('performances/create', {
+                  pageTitle: 'Create a Performance',
+                  isAuthenticated: req.session.isLoggedIn,
+                  instruments: instruments, // Truyền danh sách nhạc cụ sang view
+                });
+              } else {
+                res.redirect('/');
+              }
+            } catch (error) {
+              console.error('Error fetching instruments:', error);
               res.redirect('/');
             }
           };
+          
 
-          postCreatePerformance = async (req, res, next) => {
-            const date = req.body.date;
-            const location = req.body.location;
-            const instrumentNames = req.body.instrumentNames; // Assume you get an array of instrumentNames from the form
-        
-              // Tạo buổi biểu diễn
-              const createdPerformance = await Performance.create({
-                date: date,
-                location: location,
-                userId: req.session.user.id,
-              });
-        
-              // Ánh xạ tên nhạc cụ thành id của chúng
-              const instrumentIds = await Instrument.findAll({
-                where: { title: instrumentNames },
-                attributes: ['id'],
-              });
-        
-              // Ghi thông tin về nhạc cụ sử dụng trong buổi biểu diễn vào bảng liên kết
-              await PerformanceInstrument.bulkCreate(
-                instrumentIds.map(instrumentId => ({
-                  performanceId: createdPerformance.id,
-                  instrumentId: instrumentId,
-                }))
-              );
-        
-              console.log('Created performance');
-              res.redirect('/');
+          // postCreatePerformance = (req, res, next) => {
+          //   const title = req.body.title;
+          //   const date = req.body.date;
+          //   const location = req.body.location;
+          //   const instrumentNames = req.body.instrumentNames;
+          
+          //     req.user
+          //       .createPerformance({
+          //         title: title,
+          //         date: date,
+          //         location: location,
+          //       })
+          //       .then(createdPerformance => {
+          //         return Instrument.findAll({
+          //           where: { title: instrumentNames },
+          //           attributes: ['id'],
+          //         });
+          //       })
 
-          };
+          //       .then(instruments => {
+          //           //insert data into associative table
+          //           const performanceInstrumentData = instruments.map(instrumentId => ({
+          //             performanceId: createdPerformance.id,
+          //             instrumentId: instrumentId,
+          //           }));
+                
+          //           console.log('DATA: ', performanceInstrumentData);
+          //           return PerformanceInstrument.bulkCreate(performanceInstrumentData);
+
+          //       })
+          //       .then(() => {
+          //         console.log('Created performance');
+          //         res.redirect('/');
+          //       })
+          //       .catch(error => {
+          //         console.error('Error creating performance or instruments:', error);
+          //         // res.redirect('/');
+          //       });
+          // };
+          // postCreatePerformance
+postCreatePerformance = (req, res, next) => {
+  const title = req.body.title;
+  const date = req.body.date;
+  const location = req.body.location;
+  const instrumentNames = req.body.instrumentNames;
+  const imageUrl = req.body.imageUrl;
+  const videoId = req.body.videoId;
+
+  // Kiểm tra xem người dùng có vai trò là "admin" không
+  if (req.session.isLoggedIn && req.session.user.role === 'admin') {
+    // Tạo buổi biểu diễn
+    Performance.create({
+      title: title,
+      date: date,
+      location: location,
+      imageUrl: imageUrl,
+      videoId: videoId,
+      
+    })
+      .then(createdPerformance => {
+        // Ánh xạ tên nhạc cụ thành id của chúng
+        return Instrument.findAll({
+          where: { title: instrumentNames },
+          attributes: ['id'],
+        }).then(instruments => {
+
+          createdPerformance.setInstruments(instruments).then(() => {
+            console.log('Created performance');
+            res.redirect('/');
+          });
+        });
+      })
+      .catch(error => {
+        console.error('Error creating performance:', error);
+        res.redirect('/');
+      });
+  } else {
+    // Người dùng không phải là admin
+    res.redirect('/');
+  }
+};
+
+          
+          
 
 
 

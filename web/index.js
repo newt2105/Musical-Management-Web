@@ -20,6 +20,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 Instrument.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
 User.hasMany(Instrument);
+Performance.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
+User.hasMany(Performance);
 Performance.belongsToMany(Instrument, { through: 'PerformanceInstruments' });
 Instrument.belongsToMany(Performance, { through: 'PerformanceInstruments' });
 
