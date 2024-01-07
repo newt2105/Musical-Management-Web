@@ -1,0 +1,35 @@
+<!-- views/performance/show.ejs -->
+<%- include('../includes/head.ejs') %>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= pageTitle %></title>
+</head>
+
+<body>
+
+  <h1><%= performance.title %></h1>
+  <p>Date: <%= performance.date %></p>
+  <p>Location: <%= performance.location %></p>
+  <h2> <%= performance.title %></h2>
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/<%= performance.videoId %>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+  <h2>Related Instruments:</h2>
+  <ul>
+
+    
+    <% instruments.forEach(instrument => { %>
+      <a href="/instrument/<%= instrument.id %>">
+        <li><%= instrument.title %></li>
+      </a>
+    <% }); %>
+  </ul>
+
+  <a href="/">Back to Home</a>
+
+</body>
+
+</html>

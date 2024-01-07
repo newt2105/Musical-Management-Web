@@ -64,7 +64,7 @@ class AuthControllers{
         const password = req.body.password;
         User.findOne({where: {email: email}})
           .then(userDoc => {
-            console.log('email: ', userDoc)
+            // console.log('email: ', userDoc)
             if(userDoc){
               return res.redirect('/signup')
             }
