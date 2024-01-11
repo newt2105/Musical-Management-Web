@@ -64,7 +64,7 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-image: url('https://c4.wallpaperflare.com/wallpaper/677/228/927/piano-musical-instrument-monochrome-dust-wallpaper-preview.jpg'); /* Đường dẫn đến hình ảnh họa tiết */
+            background-image: url(''); /* Đường dẫn đến hình ảnh họa tiết */
             background-color: #f8f9fa;
             background-repeat: repeat; /* Hình ảnh lặp lại */
         }
@@ -143,6 +143,10 @@
                     <li class="nav-item">
                       <a class="nav-link" href="/performance">Performance</a>
                     </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/instrument">Instrument</a>
+                      </li>
                 </ul>
 
                 <div class="dropdown">
@@ -154,6 +158,7 @@
                             <a class="dropdown-item" href="/login">Login</a>
                             <a class="dropdown-item" href="/signup">Sign Up</a>
                         <% } else { %>
+                            
                             <form action="/logout" method="post">
                                 <button type="submit" class="dropdown-item">Logout</button>
                             </form>

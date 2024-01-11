@@ -12,7 +12,6 @@ class SiteControllers{
               pageTitle: 'All Instruments',
               path: '/',
               isAuthenticated: req.session.isLoggedIn,
-              role :  'default' ,
             });
           })
           .catch(err => console.log(err));
@@ -36,7 +35,8 @@ class SiteControllers{
     index2(req, res){
         res.render("site/post",{
           pageTitle: 'Add an instrument',
-          isAuthenticated: req.session.isLoggedIn,          
+          isAuthenticated: req.session.isLoggedIn,  
+          role : req.session.user.role,        
         })
     }
 

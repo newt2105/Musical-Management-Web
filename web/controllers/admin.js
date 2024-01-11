@@ -5,7 +5,7 @@ class AdminControllers{
 
     getCreate = (req, res, next) => {
 
-      if (req.session.isLoggedIn && req.session.user.role === 'admin') {
+      // if (req.session.isLoggedIn && req.session.user.role === 'admin') {
         // Chỉ cho admin truy cập trang tạo mới instrument
         res.render('instruments/create', {
           pageTitle: 'Add an instrument',
@@ -13,15 +13,15 @@ class AdminControllers{
           isAuthenticated: req.session.isLoggedIn,
            
         });
-      } else {
-        // Người dùng không có quyền truy cập trang này, bạn có thể chuyển hướng hoặc hiển thị thông báo lỗi
-        // res.render('alert',{
-        //   pageTitle: 'Error',
-        //   editing: false,
-        //   isAuthenticated: true,
-        // })
-        res.redirect('/'); // Chẳng hạn, chuyển hướng về trang chủ
-      }
+      // } else {
+      //   // Người dùng không có quyền truy cập trang này, bạn có thể chuyển hướng hoặc hiển thị thông báo lỗi
+      //   // res.render('alert',{
+      //   //   pageTitle: 'Error',
+      //   //   editing: false,
+      //   //   isAuthenticated: true,
+      //   // })
+      //   res.redirect('/'); // Chẳng hạn, chuyển hướng về trang chủ
+      // }
     };
 
     postCreate = (req, res, next) => {
@@ -202,16 +202,17 @@ class AdminControllers{
           return instrument.save();
         })
         .then(updatedInstrument => {
-          res.status(200).json({ message: 'Instrument approved successfully', instrument: updatedInstrument });
+          res.redirect('/')
         })
         .catch(err => {
           console.log(err);
-          res.status(500).json({ message: 'Internal Server Error' });
+          // res.status(500).json({ message: 'Internal Server Error' });
         });
     };
   
     // Hàm reject instrument
     rejectInstrument = (req, res, next) => {
+      
       const instrumentId = req.params.instrumentId;
   
       Instrument.findByPk(instrumentId)
@@ -227,35 +228,42 @@ class AdminControllers{
           return instrument.save();
         })
         .then(updatedInstrument => {
-          res.status(200).json({ message: 'Instrument rejected successfully', instrument: updatedInstrument });
+          res.redirect('/')
         })
         .catch(err => {
           console.log(err);
-          res.status(500).json({ message: 'Internal Server Error' });
+          // res.status(500).json({ message: 'Internal Server Error' });
         });
     };
 
     // Trong controller admin
     getPendingInstruments = (req, res, next) => {
-      Instrument.findAll({
-        where: {
-          status: 'pending'
-        }
-      })
-        .then(pendingInstruments => {
-          res.render('instruments/pedingInstru', {
-            pendingInstruments: pendingInstruments,
-            pageTitle: 'Pending Instruments',
-            path: '/admin/pending-instruments',
-            isAuthenticated: req.session.isLoggedIn,
-          });
+      // Kiểm tra nếu người dùng đã đăng nhập và có vai trò là "admin"
+      // if (req.session.isLoggedIn && req.session.user.role === 'admin') {
+        Instrument.findAll({
+          where: {
+            status: 'pending'
+          }
         })
-        .catch(err => console.log(err));
+          .then(pendingInstruments => {
+            res.render('instruments/pedingInstru', {
+              pendingInstruments: pendingInstruments,
+              pageTitle: 'Pending Instruments',
+              path: '/admin/pending-instruments',
+              isAuthenticated: req.session.isLoggedIn,
+            });
+          })
+          .catch(err => console.log(err));
+      // } else {
+      //   // Nếu không phải admin, chuyển hướng về trang chủ hoặc trang khác
+      //   res.redirect('/');
+      // }
     };
+    
 
     getCreatePerformance = async (req, res, next) => {
       try {
-        if (req.session.isLoggedIn && req.session.user.role === 'admin') {
+        // if (req.session.isLoggedIn && req.session.user.role === 'admin') {
           const instruments = await Instrument.findAll({
             where: { status: 'approved' }, // Lấy danh sách nhạc cụ đã được phê duyệt
           });
@@ -264,11 +272,11 @@ class AdminControllers{
             pageTitle: 'Create a Performance',
             isAuthenticated: req.session.isLoggedIn,
             instruments: instruments, // Truyền danh sách nhạc cụ sang view
-            isAuthenticated: req.session.isLoggedIn,
+            // isAuthenticated: req.session.isLoggedIn,
           });
-        } else {
-          res.redirect('/');
-        }
+        // } else {
+        //   res.redirect('/');
+        // }
       } catch (error) {
         console.error('Error fetching instruments:', error);
         res.redirect('/');
@@ -323,11 +331,7 @@ class AdminControllers{
       const instrumentNames = req.body.instrumentNames;
       const imageUrl = req.body.imageUrl;
       const videoId = req.body.videoId;
-    
-      // Kiểm tra xem người dùng có vai trò là "admin" không
-      if (req.session.isLoggedIn && req.session.user.role === 'admin') {
-        // Tạo buổi biểu diễn
-        req.user
+      req.user
         .createPerformance({
           title: title,
           date: date,
@@ -342,8 +346,8 @@ class AdminControllers{
               where: { title: instrumentNames },
               attributes: ['id'],
             }).then(instruments => {
-            
-              createdPerformance.setInstruments(instruments).then(() => {
+              createdPerformance.setInstruments(instruments)
+              .then(() => {
                 console.log('Created performance');
                 res.redirect('/');
               });
@@ -353,10 +357,6 @@ class AdminControllers{
             console.error('Error creating performance:', error);
             res.redirect('/');
           });
-      } else {
-        // Người dùng không phải là admin
-        res.redirect('/');
-      }
     };
 }
 

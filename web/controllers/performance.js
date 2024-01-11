@@ -42,50 +42,77 @@ getPerformances = (req, res, next) => {
 show = (req, res, next) => {
   const performanceId = req.params.performanceId;
 
-  Performance.findByPk(performanceId)
+  // Performance.findByPk(performanceId)
+  //   .then(performance => {
+  //     if (!performance) {
+  //       // Xử lý trường hợp không tìm thấy buổi biểu diễn
+  //       return res.status(404).send('Performance not found');
+  //     }
+
+  //     // Truy vấn các nhạc cụ liên quan thông qua bảng liên kết
+  //     PerformanceInstrument.findAll({
+  //       where: { performanceId: performanceId },
+  //       // include: Instrument, // Kết hợp với model Instrument
+  //     })
+  //       .then(performanceInstruments => {
+  //         // console.log("per: ", performanceInstruments)
+  //         // Lấy mảng instrumentIds
+  //         const instrumentIds = performanceInstruments.map(pi => pi.instrumentId);
+
+  //         // Truy vấn thông tin chi tiết của các nhạc cụ từ bảng Instruments
+  //         Instrument.findAll({
+  //           where: { id: instrumentIds },
+  //         })
+  //           .then(instruments => {
+              
+  //             // Truyền dữ liệu sang view để hiển thị
+  //             res.render('performances/show2', {
+  //               performance: performance,
+  //               instruments: instruments,
+  //               pageTitle: performance.title,
+  //               isAuthenticated: req.session.isLoggedIn,  
+  //             });
+  //           })
+  //           .catch(error => {
+  //             console.error('Error fetching instruments:', error);
+  //             res.status(500).send('Internal Server Error');
+  //           });
+  //       })
+  //       .catch(error => {
+  //         console.error('Error fetching performance instruments:', error);
+  //         res.status(500).send('Internal Server Error');
+  //       });
+  //   })
+  //   .catch(error => {
+  //     console.error('Error fetching performance:', error);
+  //     res.status(500).send('Internal Server Error');
+  //   });
+
+
+  Performance.findByPk(performanceId, {
+    include: [{ model: Instrument, through: PerformanceInstrument}],
+  })
     .then(performance => {
       if (!performance) {
-        // Xử lý trường hợp không tìm thấy buổi biểu diễn
         return res.status(404).send('Performance not found');
       }
-
-      // Truy vấn các nhạc cụ liên quan thông qua bảng liên kết
-      PerformanceInstrument.findAll({
-        where: { performanceId: performanceId },
-        // include: Instrument, // Kết hợp với model Instrument
-      })
-        .then(performanceInstruments => {
-          console.log("per: ", performanceInstruments)
-          // Lấy mảng instrumentIds
-          const instrumentIds = performanceInstruments.map(pi => pi.instrumentId);
-
-          // Truy vấn thông tin chi tiết của các nhạc cụ từ bảng Instruments
-          Instrument.findAll({
-            where: { id: instrumentIds },
-          })
-            .then(instruments => {
-              // Truyền dữ liệu sang view để hiển thị
-              res.render('performances/show2', {
-                performance: performance,
-                instruments: instruments,
-                pageTitle: 'Performance Details',
-                isAuthenticated: req.session.isLoggedIn,  
-              });
-            })
-            .catch(error => {
-              console.error('Error fetching instruments:', error);
-              res.status(500).send('Internal Server Error');
-            });
-        })
-        .catch(error => {
-          console.error('Error fetching performance instruments:', error);
-          res.status(500).send('Internal Server Error');
-        });
+  
+      // console.log('Performance:', performance);
+      // console.log('Instruments:', performance.instruments);
+  
+      res.render('performances/show2', {
+        performance,
+        instruments: performance.instruments ,  // Ensure instruments is an array
+        pageTitle: performance.title,
+        isAuthenticated: req.session.isLoggedIn,
+      });
     })
     .catch(error => {
-      console.error('Error fetching performance:', error);
+      console.error('Error fetching performance with instruments:', error);
       res.status(500).send('Internal Server Error');
     });
+  
+  
 };
 
 
