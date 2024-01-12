@@ -14,6 +14,7 @@ router.post('/create-performance', adminController.postCreatePerformance);
 // router.get('/:performance', adminController.getInstruments);
 // router.get('/performance', adminController.getPerformances);
 
+router.get('/edit2/:instrumentId', isAuth, adminController.getEdit2);
 router.get('/edit/:instrumentId', isAuth, adminController.getEdit);
 router.post('/edit', adminController.postEdit);
 

@@ -18,9 +18,9 @@ app.set('views', path.join(__dirname, 'views'))
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-Instrument.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
+Instrument.belongsTo(User, { constraints: true });
 User.hasMany(Instrument);
-Performance.belongsTo(User, { constraints: true, onDelete: 'CASCADE' });
+Performance.belongsTo(User, { constraints: true});
 User.hasMany(Performance);
 Performance.belongsToMany(Instrument, { through: 'PerformanceInstruments' });
 Instrument.belongsToMany(Performance, { through: 'PerformanceInstruments' });

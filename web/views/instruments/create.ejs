@@ -12,7 +12,7 @@
                 </div>
                 <div class="form-group">
                     <label for="description">Description</label>
-                    <textarea class="form-control" id="description" name="description" rows="3"><% if (editing) { %><%= instrument.description %><% } %></textarea>
+                    <textarea class="form-control" id="description" name="description" rows="3"> <% if (editing) { %><%= instrument.description %><% } %></textarea>
                 </div>
                 <div class="form-group">
                     <label for="videoId">VideoId</label>
@@ -22,10 +22,17 @@
                     <label for="imageUrl">Image URL</label>
                     <input type="text" class="form-control" id="imageUrl" name="imageUrl" value="<% if (editing) { %><%= instrument.imageUrl %><% } %>">
                 </div>
+                <div class="form-group">
+                    <label for="genre">Genre</label>
+                    <input type="text" class="form-control" id="genre" name="genre" value="<% if (editing) { %><%= instrument.genre %><% } %>">
+                </div>
                 <% if (editing) { %>
                     <input type="hidden" value="<%= instrument.id %>" name="instrumentId">
                 <% } %>
+
+
                 <button type="submit" class="btn btn-primary"><% if (editing) { %>Update Instrument<% } else { %>Add Instrument<% } %></button>
+
             </form>
         </div>
     </div>

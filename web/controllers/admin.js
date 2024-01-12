@@ -29,6 +29,7 @@ class AdminControllers{
       const imageUrl = req.body.imageUrl;
       const description = req.body.description;
       const videoId = req.body.videoId;
+      const genre= req.body.genre;
       // const instrument = new Instrument({
       //   title: title,
       //   imageUrl: imageUrl,
@@ -43,6 +44,7 @@ class AdminControllers{
         imageUrl: imageUrl,
         description: description,
         videoId: videoId,
+        genre: genre,
         status: 'approved',
         })
         .then(result =>{
@@ -83,17 +85,19 @@ class AdminControllers{
     //   }
     // };
     getEdit = (req, res, next) => {
-      if (req.session.isLoggedIn && req.session.user.role === 'admin') {
-        const editMode = req.query.edit === 'true'; // Đảm bảo editMode là true khi được đặt
+      // if (req.session.isLoggedIn && req.session.user.role === 'admin') {
+        const editMode = req.query.edit; // Đảm bảo editMode là true khi được đặt
         if (!editMode) {
-          return res.redirect('/');
+          console.log("ALOOOOOOOOO")
+          // return res.redirect('/');
         }
     
         const insId = req.params.instrumentId;
         Instrument.findByPk(insId)
           .then(instrument => {
             if (!instrument) {
-              return res.redirect('/');
+              console.log("ERR")
+              // return res.redirect('/');
             }
     
             res.render('instruments/create', {
@@ -103,12 +107,44 @@ class AdminControllers{
               instrument: instrument,
               isAuthenticated: req.session.isLoggedIn,
               // role : req.session.user.role,
+              ispending: false,
             });
           })
           .catch(err => console.log(err));
-      } else {
-        res.redirect('/');
-      }
+      // } else {
+      //   res.redirect('/');
+      // }
+    };
+    getEdit2 = (req, res, next) => {
+      // // if (req.session.isLoggedIn && req.session.user.role === 'admin') {
+      //   const editMode = req.query.edit; // Đảm bảo editMode là true khi được đặt
+      //   if (!editMode) {
+      //     console.log("ALOOOOOOOOO")
+      //     // return res.redirect('/');
+      //   }
+    
+        const insId = req.params.instrumentId;
+        Instrument.findByPk(insId)
+          .then(instrument => {
+            if (!instrument) {
+              console.log("ERR")
+              // return res.redirect('/');
+            }
+    
+            res.render('instruments/create2', {
+              pageTitle: 'review',
+              path: '/instrument/edit2',
+              // editing: editMode,
+              instrument: instrument,
+              isAuthenticated: req.session.isLoggedIn,
+              // role : req.session.user.role,
+              // ispending: true,
+            });
+          })
+          .catch(err => console.log(err));
+      // } else {
+      //   res.redirect('/');
+      // }
     };
     
 
@@ -118,12 +154,14 @@ class AdminControllers{
         const updatedVideoId = req.body.videoId;
         const updatedImageUrl = req.body.imageUrl;
         const updatedDesc = req.body.description;
+        const updatedgenre= req.body.genre;
         Instrument.findByPk(insId)
           .then(instrument => {
             instrument.title = updatedTitle;
             instrument.videoId = updatedVideoId;
             instrument.description = updatedDesc;
             instrument.imageUrl = updatedImageUrl;
+            instrument.genre = updatedgenre;
             return instrument.save();
           })
           .then(result => {
@@ -188,21 +226,36 @@ class AdminControllers{
 
     approveInstrument = (req, res, next) => {
       const instrumentId = req.params.instrumentId;
-  
+      // 
+      const updatedTitle = req.body.title;
+      const updatedVideoId = req.body.videoId;
+      const updatedImageUrl = req.body.imageUrl;
+      const updatedDesc = req.body.description;
+      const genre= req.body.genre;
+      // 
       Instrument.findByPk(instrumentId)
         .then(instrument => {
           if (!instrument) {
             return res.status(404).json({ message: 'Instrument not found' });
           }
-  
-          // Cập nhật trạng thái thành 'approved'
+          // 
           instrument.status = 'approved';
+          instrument.title = updatedTitle;
+          instrument.videoId = updatedVideoId;
+          instrument.description = updatedDesc;
+          instrument.imageUrl = updatedImageUrl;
+          instrument.genre = genre;
+          
+          // 
+          // Cập nhật trạng thái thành 'approved'
+          // instrument.status = 'approved';
   
           // Lưu thay đổi vào cơ sở dữ liệu
           return instrument.save();
         })
         .then(updatedInstrument => {
-          res.redirect('/')
+          console.log("HIIIIIIIIIIIII")
+          res.redirect('/admin/pending-instruments')
         })
         .catch(err => {
           console.log(err);
@@ -225,10 +278,10 @@ class AdminControllers{
           instrument.status = 'rejected';
   
           // Lưu thay đổi vào cơ sở dữ liệu
-          return instrument.save();
+          return instrument.destroy();
         })
         .then(updatedInstrument => {
-          res.redirect('/')
+          res.redirect('/admin/pending-instruments')
         })
         .catch(err => {
           console.log(err);
@@ -246,11 +299,12 @@ class AdminControllers{
           }
         })
           .then(pendingInstruments => {
-            res.render('instruments/pedingInstru', {
+            res.render('instruments/pedingInstru2', {
               pendingInstruments: pendingInstruments,
               pageTitle: 'Pending Instruments',
               path: '/admin/pending-instruments',
               isAuthenticated: req.session.isLoggedIn,
+              
             });
           })
           .catch(err => console.log(err));
