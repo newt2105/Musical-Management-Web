@@ -2,7 +2,7 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../ulti/database');
 
-const PerformanceInstrument = sequelize.define('performanceInstrument', {
+const Appear = sequelize.define('appear', {
   performanceId: {
     type: Sequelize.INTEGER,
     primaryKey: true,
@@ -13,6 +13,9 @@ const PerformanceInstrument = sequelize.define('performanceInstrument', {
     primaryKey: true,
     allowNull: false,
   },
-});
+},{
+  timestamps: false,
+}
+);
 
-module.exports = PerformanceInstrument;
+module.exports = Appear;

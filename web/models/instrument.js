@@ -11,15 +11,19 @@ const Instrument = sequelize.define('instrument',{
   },
   title: Sequelize.STRING,
   imageUrl: Sequelize.STRING,
-  description: Sequelize.STRING,
+  description: Sequelize.TEXT,
   videoId: Sequelize.STRING,
   userId: Sequelize.INTEGER, 
   genre : Sequelize.STRING,
+
 
   status: {
     type: Sequelize.ENUM('pending', 'approved', 'rejected'),
     defaultValue: 'pending',
   },
-})
+},{
+  timestamps: false,
+}
+);
 
 module.exports = Instrument

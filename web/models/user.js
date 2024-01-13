@@ -12,11 +12,15 @@ const User = sequelize.define('user', {
   email: Sequelize.STRING,
   password: Sequelize.STRING,
 
+
   role: {
     type: Sequelize.ENUM('user', 'admin'),
     defaultValue: 'user', // Mặc định là 'user' nếu không có giá trị được cung cấp
     allowNull: true,
   },
-});
+},{
+  timestamps: false,
+}
+);
 
 module.exports = User;

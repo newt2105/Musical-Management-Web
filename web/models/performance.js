@@ -14,7 +14,9 @@ const Performance = sequelize.define('performance', {
   location: Sequelize.STRING,
   imageUrl: Sequelize.STRING,
   videoId: Sequelize.STRING,
-
-});
+},{
+  timestamps: false,
+}
+);
 
 module.exports = Performance;

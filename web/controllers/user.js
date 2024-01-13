@@ -16,6 +16,7 @@ class UserControllers{
       const imageUrl = req.body.imageUrl;
       const description = req.body.description;
       const videoId = req.body.videoId;
+      const genre = req.body.genre;
       // const instrument = new Instrument({
       //   title: title,
       //   imageUrl: imageUrl,
@@ -30,6 +31,7 @@ class UserControllers{
         imageUrl: imageUrl,
         description: description,
         videoId: videoId,
+        genre: genre,
         status :'pending'
         })
         .then(result =>{

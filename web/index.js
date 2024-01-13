@@ -22,8 +22,8 @@ Instrument.belongsTo(User, { constraints: true });
 User.hasMany(Instrument);
 Performance.belongsTo(User, { constraints: true});
 User.hasMany(Performance);
-Performance.belongsToMany(Instrument, { through: 'PerformanceInstruments' });
-Instrument.belongsToMany(Performance, { through: 'PerformanceInstruments' });
+Performance.belongsToMany(Instrument, { through: 'appear' });
+Instrument.belongsToMany(Performance, { through: 'appear' });
 
 app.use(
   session({
