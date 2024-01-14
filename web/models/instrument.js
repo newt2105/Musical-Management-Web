@@ -18,7 +18,7 @@ const Instrument = sequelize.define('instrument',{
 
 
   status: {
-    type: Sequelize.ENUM('pending', 'approved', 'rejected'),
+    type: Sequelize.ENUM('pending', 'approved'),
     defaultValue: 'pending',
   },
 },{
