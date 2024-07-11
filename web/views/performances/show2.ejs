@@ -1,0 +1,54 @@
+<!-- views/performance/show.ejs -->
+<%- include('../includes/head.ejs') %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/show.css">
+    <!-- Các thẻ meta và các thẻ khác có thể được thêm vào đây -->
+    <title>Your Page Title</title>
+</head>
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-lg-3">
+        <div class="card">
+            <div class="card-body">
+              <h3>Related Instruments:</h3>
+              <ul>
+                <% instruments.forEach(instrument => { %>
+                  <a href="/instrument/<%= instrument.id %>">
+                    <li><%= instrument.title %></li>
+                  </a>
+                <% }); %>
+              </ul>
+            </div>
+        </div>
+    </div>
+  <div class="row justify-content-center">
+      <div class="col-md-6">
+
+
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title><%= pageTitle %></title>
+          </head>
+
+          <body>
+          
+            <h1><%= performance.title %></h1>
+            <p>Date: <%= performance.date %></p>
+            <p>Location: <%= performance.location %></p>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/<%= performance.videoId %>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe><br>
+
+            
+            <br><a type="button" class="btn btn-primary btn-sm" href="/" >Back to homepage</a>
+            
+          
+          </body>
+
+          </html>
+      </div>
+    </div>
+</div>
